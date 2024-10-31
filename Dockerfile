@@ -1,5 +1,5 @@
-# Use the Maven 3.8.3 image with OpenJDK 17 to build the project
-FROM maven:3.8.3-openjdk-17 AS build
+# Use the Maven 3.8.4 image with OpenJDK 17 to build the project
+FROM maven:3.8.4-openjdk-17 AS build
 
 # Set the working directory inside the container
 WORKDIR /app
