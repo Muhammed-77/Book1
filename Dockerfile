@@ -1,21 +1,26 @@
-#Use a Maven image with OpenJDK 17 as the base image
-FROM maven:3.8.3-openjdk-17
+# Use the Maven 3.8.3 image with OpenJDK 17 to build the project
+FROM maven:3.8.3-openjdk-17 AS build
 
-
-#Set the working directory in the container
+# Set the working directory inside the container
 WORKDIR /app
 
-#Copy the Maven build files and project source code to the container
+# Copy the project files to the container
 COPY . .
 
-#Package the application and skip tests
+# Build the project
 RUN mvn clean package -DskipTests
 
-#Find any JAR file in the target directory and rename it to server.jar
-RUN cp target/*.jar server.jar
+# Use the official OpenJDK 17 image for running the application
+FROM openjdk:17-jdk-slim
 
-#Expose the port that the app will run on
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the built JAR file from the build stage
+COPY --from=build /app/target/*.jar app.jar
+
+# Expose the application's port
 EXPOSE 8080
 
-#Run the JAR file with the specified port
-ENTRYPOINT ["java", "-jar", "server.jar", "--server.port=8081"]
+# Run the application
+ENTRYPOINT ["java", "-jar", "app.jar"]
