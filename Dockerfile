@@ -15,7 +15,7 @@ RUN mvn clean package -DskipTests
 RUN cp target/*.jar server.jar
 
 #Expose the port that the app will run on
-EXPOSE 8081
+EXPOSE 8080
 
 #Run the JAR file with the specified port
 ENTRYPOINT ["java", "-jar", "server.jar", "--server.port=8081"]
